@@ -1,5 +1,11 @@
 # @lightningdb/cli
 
+## 0.0.6
+
+### Patch Changes
+
+- 9cb1363: set package versions
+
 ## 0.0.1
 
 ### Patch Changes

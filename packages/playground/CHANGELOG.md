@@ -1,5 +1,13 @@
 # @lightningdb/playground
 
+## 0.0.3
+
+### Patch Changes
+
+- 9cb1363: set package versions
+- Updated dependencies [9cb1363]
+  - @lightningdb/client@0.1.13
+
 ## 0.0.1
 
 ### Patch Changes

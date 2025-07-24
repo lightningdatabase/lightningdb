@@ -1,5 +1,11 @@
 # @lightningdb/plugin
 
+## 0.1.13
+
+### Patch Changes
+
+- 9cb1363: set package versions
+
 ## 0.0.1
 
 ### Patch Changes
