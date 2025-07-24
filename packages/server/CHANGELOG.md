@@ -1,5 +1,13 @@
 # @lightningdb/server
 
+## 0.0.1
+
+### Patch Changes
+
+- eb86737: initial version
+- Updated dependencies [eb86737]
+  - @lightningdb/auth-base@0.0.1
+
 ## 0.1.12
 
 ## 0.1.11

@@ -1,5 +1,13 @@
 # @lightningdb/auth-clerk
 
+## 0.0.1
+
+### Patch Changes
+
+- eb86737: initial version
+- Updated dependencies [eb86737]
+  - @lightningdb/auth-base@0.0.1
+
 ## 0.0.2
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@lightningdb/auth-clerk",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
@@ -14,7 +14,7 @@
   "description": "Auth handler for Clerk",
   "dependencies": {
     "@clerk/backend": "^2.0.0",
-    "@lightningdb/auth-base": "^0.0.0",
+    "@lightningdb/auth-base": "^0.0.1",
     "@prisma/client": "^6.8.2",
     "@zenstackhq/runtime": "^2.15.1"
   },

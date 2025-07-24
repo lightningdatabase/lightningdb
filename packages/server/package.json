@@ -1,6 +1,6 @@
 {
   "name": "@lightningdb/server",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "LightningDB Server",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -11,7 +11,7 @@
     "build": "tsup"
   },
   "dependencies": {
-    "@lightningdb/auth-base": "^0.0.0",
+    "@lightningdb/auth-base": "^0.0.1",
     "@zenstackhq/runtime": "^2.12.3",
     "pg-logical-replication": "^2.0.7",
     "ws": "^8.18.1",

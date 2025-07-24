@@ -1,5 +1,11 @@
 # @lightningdb/plugin
 
+## 0.0.1
+
+### Patch Changes
+
+- eb86737: initial version
+
 ## 0.1.12
 
 ### Patch Changes
