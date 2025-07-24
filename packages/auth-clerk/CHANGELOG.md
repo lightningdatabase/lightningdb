@@ -1,5 +1,11 @@
 # @lightningdb/auth-clerk
 
+## 0.0.3
+
+### Patch Changes
+
+- 05fc10d: update auth clerk version
+
 ## 0.0.1
 
 ### Patch Changes
