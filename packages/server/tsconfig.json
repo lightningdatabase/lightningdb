@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "sourceMap": false,
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@lightningdb/server/*": ["dist/*"]
+    },
+    "strict": true,
+    "lib": ["esnext"],
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["vitest/globals"],
+    "declaration": true,
+    "declarationMap": true,
+    "moduleResolution": "bundler"
+  },
+  "exclude": ["vitest.config.ts", "dist/*"]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "@lightningdb/plugin",
+  "version": "0.0.0",
+  "description": "Zenstack plugin used to automatically generate the server and client schema",
+  "author": "Edward Louth <edlouth@gmail.com>",
+  "type": "commonjs",
+  "main": "dist/lightning-plugin.js",
+  "scripts": {
+    "prepublishOnly": "rm -rf ./dist && npm run build",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@zenstackhq/sdk": "^2.12.3",
+    "typescript": "^5.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.14"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lightningdatabase/lightning-plugin.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lightningdatabase/lightning-plugin/issues"
+  },
+  "homepage": "https://github.com/lightningdatabase/lightning-plugin#readme"
+}

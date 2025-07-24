@@ -1,0 +1,54 @@
+name: Server Test
+
+on:
+  push:
+    paths:
+      - ".github/workflows/server-test.yml"
+      - "packages/server/**"
+      - "packages/auth-base/**"
+
+concurrency:
+  group: ${{ github.ref }}-server-test
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: packages/server
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use latest Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: .
+
+      - name: Build dependent package auth-base
+        run: npm run build
+        working-directory: packages/auth-base
+
+      - name: Check typescript
+        run: npx tsc
+
+      - name: Run npm tests
+        run: npm run test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          flags: server
+
+      - run: npm run build

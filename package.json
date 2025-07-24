@@ -1,0 +1,13 @@
+{
+  "name": "@lightningdb",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "version-packages": "changeset version && npm install",
+    "publish-packages": "changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.4"
+  }
+}

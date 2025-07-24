@@ -1,0 +1,65 @@
+{
+  "name": "@lightningdb/playground",
+  "version": "0.0.0",
+  "description": "LightningDB Playground",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lightningdatabase/lightningdb.git"
+  },
+  "author": "Edward Louth <edlouth@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/lightningdatabase/lightningdb/issues"
+  },
+  "homepage": "https://github.com/lightningdatabase/lightningdb#readme",
+  "scripts": {
+    "prepublishOnly": "rm -rf ./dist && npm run build",
+    "build": "tsc",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@lightningdb/client": "^0.0.0",
+    "@mui/icons-material": "^7.2.0",
+    "@mui/lab": "^7.0.0-beta.14",
+    "express": "^5.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.29.0",
+    "@types/express": "^5.0.3",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.5.2",
+    "eslint": "^9.29.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.2.0",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.34.1",
+    "vite": "^7.0.0"
+  },
+  "files": [
+    "LICENSE",
+    "**/*.md",
+    "**/*.cjs",
+    "**/*.cjs.map",
+    "**/*.d.cts",
+    "**/*.js",
+    "**/*.js.map",
+    "**/*.d.ts",
+    "**/*.json"
+  ]
+}

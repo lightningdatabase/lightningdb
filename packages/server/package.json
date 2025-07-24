@@ -1,0 +1,71 @@
+{
+  "name": "@lightningdb/server",
+  "version": "0.0.0",
+  "description": "LightningDB Server",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "rm -rf ./dist && npm run build",
+    "build": "tsup"
+  },
+  "dependencies": {
+    "@lightningdb/auth-base": "^0.0.0",
+    "@zenstackhq/runtime": "^2.12.3",
+    "pg-logical-replication": "^2.0.7",
+    "ws": "^8.18.1",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.23",
+    "@types/ws": "^8.18.0",
+    "@vitest/coverage-v8": "^3.2.3",
+    "prisma": "^6.5.0",
+    "ts-node": "10.9.2",
+    "tsup": "^8.5.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2",
+    "vitest": "^3.1.1",
+    "vitest-mock-extended": "^3.1.0",
+    "zenstack": "^2.12.3"
+  },
+  "peerDependencies": {
+    "@prisma/client": "^6.5.0",
+    "express": "^5.1.0",
+    "ws": "^8.18.1"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lightningdatabase/lightning-server.git"
+  },
+  "author": "Edward Louth <edlouth@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/lightningdatabase/lightning-server/issues"
+  },
+  "homepage": "https://github.com/lightningdatabase/lightning-server#readme",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./replication": {
+      "import": "./dist/replication/index.js",
+      "types": "./dist/replication/index.d.ts"
+    },
+    "./types": {
+      "import": "./dist/types.js",
+      "types": "./dist/types.d.ts"
+    },
+    "./schema.js": {
+      "import": "./dist/schema.esm.js",
+      "require": "./dist/schema.cjs.js"
+    }
+  }
+}

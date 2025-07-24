@@ -1,0 +1,37 @@
+flag_management:
+  default_rules: # the rules that will be followed for any flag added, generally
+    carryforward: true
+    statuses:
+      - type: project
+        target: auto
+        threshold: 2%
+        only_pulls: true
+      - type: patch
+        target: 90%
+        only_pulls: true
+  individual_flags: # exceptions to the default rules above, stated flag by flag
+    - name: server #fill in your own flag name
+      paths:
+        - packages/server #fill in your own path. Note, accepts globs, not regexes
+      carryforward: true
+      statuses:
+        - type: project
+          target: 20%
+          only_pulls: true
+        - type: patch
+          target: 100%
+          only_pulls: true
+    - name: client #fill in your own flag name
+      paths:
+        - packages/client #fill in your own path. Note, accepts globs, not regexes
+      carryforward: true
+      statuses:
+        - type: project
+          target: 20%
+          only_pulls: true
+        - type: patch
+          target: 100%
+          only_pulls: true
+
+ignore:
+  - "**/*.test.*"
