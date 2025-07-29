@@ -97,7 +97,7 @@ server.listen(3000, () =>
 )
 ```
 
-LightningDB connects to the Postgres database and uses replication to catch any changes and update the frontend. This is achieved with the `import "@lightningdb/server/src/replication"` import.
+LightningDB connects to the Postgres database and uses replication to catch any changes and update the frontend.
 
 #### Setup replication slot in Postgres
 
