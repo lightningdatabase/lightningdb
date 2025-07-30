@@ -39,7 +39,10 @@ const dataModelCreateData = (
                   ${table.fields
                     .filter(field => !field.relation)
                     .map(field =>
-                      fieldToZod(field, { optional: field.default }),
+                      fieldToZod(field, {
+                        optional:
+                          field.default || field.optional || field.array,
+                      }),
                     )
                     .join("\n                  ")}
                 }),`
@@ -49,7 +52,10 @@ const dataModelCreateManyData = (table: Table): string => `data: z.array(
                     ${table.fields
                       .filter(field => !field.relation)
                       .map(field =>
-                        fieldToZod(field, { optional: field.default }),
+                        fieldToZod(field, {
+                          optional:
+                            field.default || field.optional || field.array,
+                        }),
                       )
                       .join("\n                    ")}
                   }),
@@ -83,6 +89,7 @@ import {
   SortOrder,
   StringFilter,
   StringNullableFilter,
+  StringNullableListFilter,
 } from "@lightningdb/server/types"
 import type { Includes } from "@lightningdb/server/types"
 

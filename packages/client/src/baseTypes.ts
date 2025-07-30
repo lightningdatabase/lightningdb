@@ -71,6 +71,14 @@ type NestedStringNullableFilter = {
   not?: NestedStringNullableFilter | string | null
 }
 
+export type StringNullableListFilter = {
+  equals?: string[] | null
+  has?: string | null
+  hasEvery?: string[] | null
+  hasSome?: string[] | null
+  isEmpty?: boolean
+}
+
 export type IntFilter = {
   equals?: number
   in?: number[]
