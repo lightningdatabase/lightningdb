@@ -122,7 +122,10 @@ export class Field {
   }
 
   get default() {
-    return this._hasFieldAttribute("@default")
+    return (
+      this._hasFieldAttribute("@default") ||
+      this._hasFieldAttribute("@updatedAt")
+    )
   }
 
   get relation() {
