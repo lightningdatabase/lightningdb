@@ -128,6 +128,10 @@ export class Field {
     )
   }
 
+  get omit() {
+    return this._hasFieldAttribute("@omit")
+  }
+
   get relation() {
     if (!this._model.type.reference) return null
 

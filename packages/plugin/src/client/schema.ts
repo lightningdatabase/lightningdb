@@ -231,7 +231,7 @@ export namespace LightningDB {
     }
     scalars: {
       ${table.fields
-        .filter(field => !field.relation)
+        .filter(field => !field.relation && !field.omit)
         .map(field => fieldToType(field))
         .join("\n      ")}
     }
@@ -379,7 +379,10 @@ const generateClientLightningSchema = (tables: Table[]): string =>
     .map(
       table => `const ${table.name}Model: z.ZodType<any> = z.lazy(() =>
     z.object({
-      ${table.fields.map(field => relationToZod(field)).join("\n      ")}
+      ${table.fields
+        .filter(field => !field.omit)
+        .map(field => relationToZod(field))
+        .join("\n      ")}
     }),
   )`,
     )
