@@ -1,6 +1,7 @@
 import {
   IntFilter,
   StringFilter,
+  StringNullableListFilter,
   DateTimeFilter,
   BoolFilter,
   NoneFilter,
@@ -20,6 +21,7 @@ export const applyWhere = <T extends Record<string, any>>(
     | Date
     | IntFilter
     | StringFilter
+    | StringNullableListFilter
     | DateTimeFilter
     | BoolFilter
     | SomeFilter
@@ -129,6 +131,38 @@ export const applyWhere = <T extends Record<string, any>>(
         applyWhere(fieldName, key, v, item, includesMap, cache),
       ),
     )
+  }
+
+  if ("has" in whereClause) {
+    const valueHas = whereClause.has
+
+    if (!valueHas) return false
+
+    return rowValue.includes(valueHas)
+  }
+
+  if ("hasEvery" in whereClause) {
+    const valueHasEvery = whereClause.hasEvery
+
+    if (!valueHasEvery) return false
+
+    return rowValue.every((item: any) => item === valueHasEvery)
+  }
+
+  if ("isEmpty" in whereClause) {
+    const valueIsEmpty = whereClause.isEmpty
+
+    if (valueIsEmpty === undefined) return false
+
+    return valueIsEmpty ? rowValue.length === 0 : rowValue.length > 0
+  }
+
+  if ("hasSome" in whereClause) {
+    const valueHasSome = whereClause.hasSome
+
+    if (!valueHasSome) return false
+
+    return rowValue.some((item: any) => item === valueHasSome)
   }
 
   return Object.entries(whereClause).every(([key, v]) => {

@@ -112,6 +112,16 @@ export type StringNullableFilter = z.infer<typeof StringNullableFilter>
 //   not?: NestedStringNullableFilter | string | null
 // }
 
+export const StringNullableListFilter = z.object({
+  equals: z.array(z.string()).optional(),
+  has: z.string().optional(),
+  hasEvery: z.array(z.string()).optional(),
+  hasSome: z.array(z.string()).optional(),
+  isEmpty: z.boolean().optional(),
+})
+
+export type StringNullableListFilter = z.infer<typeof StringNullableListFilter>
+
 export const DateTimeFilter = z.object({
   equals: z.coerce.date().optional(),
   in: z.array(z.coerce.date()).optional(),

@@ -1,3 +1,4 @@
+import { BuiltinType } from "@zenstackhq/sdk/ast"
 import { Field, Model, Table } from "../modelParser"
 import { fieldToZod, filterIdFields } from "../shared"
 
@@ -22,11 +23,13 @@ const fieldToType = (
     filters?: boolean
   },
 ) =>
-  `${field.name}${params?.optional ? "?" : ""}: ${
-    params?.filters ? fieldToFilterType(field) : ""
-  }${fieldToTypeType(field)}${
-    params?.nullable || field.optional ? " | null" : ""
-  }`
+  field.array && params?.filters
+    ? `${field.name}?: StringNullableListFilter`
+    : `${field.name}${params?.optional ? "?" : ""}: ${
+        params?.filters ? fieldToFilterType(field) : ""
+      }${fieldToTypeType(field)}${
+        params?.nullable || field.optional ? " | null" : ""
+      }`
 
 const fieldToFilterType = (field: Field) => {
   if (field.type === "Int")
@@ -41,10 +44,16 @@ const fieldToFilterType = (field: Field) => {
 }
 
 const fieldToTypeType = (field: Field) => {
-  if (field.type === "Int" || field.type === "Float") return "number"
-  if (field.type === "Boolean") return "boolean"
-  if (field.type === "DateTime") return "Date"
-  if (field.type === "Json") return "any"
+  if (field.array) return typeToTypeType(field.type) + "[]"
+
+  return typeToTypeType(field.type)
+}
+
+const typeToTypeType = (type: BuiltinType | undefined) => {
+  if (type === "Int" || type === "Float") return "number"
+  if (type === "Boolean") return "boolean"
+  if (type === "DateTime") return "Date"
+  if (type === "Json") return "any"
 
   return "string"
 }
@@ -119,6 +128,7 @@ import type {
   SortOrder,
   StringFilter,
   StringNullableFilter,
+  StringNullableListFilter,
   Includes,
   ExclusiveOneOf,
 } from "@lightningdb/client/baseTypes"
@@ -254,7 +264,9 @@ export namespace LightningDB {
       ${model.fields
         .filter(field => !field.relation)
         .map(field =>
-          fieldToType(field, { optional: field.default || field.optional }),
+          fieldToType(field, {
+            optional: field.default || field.optional || field.array,
+          }),
         )
         .join("\n      ")}
     }
@@ -265,7 +277,9 @@ export namespace LightningDB {
       ${model.fields
         .filter(field => !field.relation)
         .map(field =>
-          fieldToType(field, { optional: field.default || field.optional }),
+          fieldToType(field, {
+            optional: field.default || field.optional || field.array,
+          }),
         )
         .join("\n      ")}
     }[]
@@ -299,7 +313,9 @@ export namespace LightningDB {
       ${model.fields
         .filter(field => !field.relation)
         .map(field =>
-          fieldToType(field, { optional: field.default || field.optional }),
+          fieldToType(field, {
+            optional: field.default || field.optional || field.array,
+          }),
         )
         .join("\n      ")}
     }

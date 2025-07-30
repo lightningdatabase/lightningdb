@@ -352,4 +352,18 @@ describe("generateIncludes", () => {
       },
     })
   })
+
+  test("string array field, no include", () => {
+    const queryParams = {
+      where: {
+        tags: {
+          has: "tag1",
+        },
+      },
+    }
+
+    const result = generateIncludes(queryParams)
+
+    expect(result).toEqual({})
+  })
 })

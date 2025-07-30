@@ -16,6 +16,10 @@ const STANDARD_FILTER_OPERATORS = new Set([
   "some",
   "every",
   "none",
+  "has",
+  "hasEvery",
+  "hasSome",
+  "isEmpty",
 ])
 
 export const generateIncludes = (queryParams: QueryParams): object => {
