@@ -70,9 +70,64 @@ I started with a cache modelled on Apollo client, where each query is stored and
 
 So, I switched to storing objects against the table they come from and not storing queries at all. At query time the library filters the cached objects and when the cache is updated the query updates too. This gives quick results from the cache while the query is sent to the server and the results then update the cache, which updates the query response. This makes the syntax over the websocket super simple, you just send lists of objects for each table.
 
+```mermaid
+graph LR;
+subgraph Client
+App<-->Cache[(Cache)]
+end
+subgraph Server
+Api<-->DB[(Postgres DB)]
+end
+Cache<-.->|websocket|Api
+```
+
+### Queries
+
+I wanted a simple query language, preferably in Typescript rather than a custom language. This makes it easy to generate queries and have them change in code, rather than as a text string.
+
+I took inspiration from Prisma, in the main LightningDB uses exactly the same syntax, which makes it easy to pass the query straight through to the underlying ORM. However, at the top level it is convinient to be able to group multiple queries together and some simplifications, so that simple queries are very short.
+
+Here is a simple example which returns all the users:
+
+```typescript
+const { data, isLoading, error } = useQuery({
+  users: {},
+})
+```
+
+and a more complex one which returns multiple queries in one go:
+
+```typescript
+const { data, isLoading, error } = useQuery({
+  edUsers: {
+    table: "users",
+    where: {
+      name: {
+        like: "%ed%",
+      },
+    },
+  },
+  posts: {
+    take: 5,
+  },
+})
+```
+
 ### Mutations
 
 Mutations optimistically update the cache, with a history stored, so that if the mutation fails on the server the cache updates can be unwound. Again, it is as simple as updating the cache to make sure all queries, however remote, get updated. This handles edge cases, for example one can have a query giving a short list of authors based on a property on one of their posts, you then update a post, the query can then work out, from the cache, that one author moves out of the list and another moves in, all just from the optimistic update to the post.
+
+Similary to queries, I wanted a simple Typescript syntax and the ability to group mutations together in a transaction. For example:
+
+```typescript
+const [createUser, { isLoading, error }] = useMutation({
+  users: {
+    create: {
+      data: values,
+    },
+  },
+})
+```
 
 ### Replication
 
