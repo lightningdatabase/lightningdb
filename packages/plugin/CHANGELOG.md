@@ -1,5 +1,11 @@
 # @lightningdb/plugin
 
+## 0.1.14
+
+### Patch Changes
+
+- 1eff884: Handle array fields and @omit directive
+
 ## 0.1.13
 
 ### Patch Changes
