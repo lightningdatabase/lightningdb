@@ -1,35 +1,20 @@
 import React, { useState } from "react"
-import { Box, Tab } from "@mui/material"
-import Query from "./Query"
-import Mutation from "./Mutation"
-import Cache from "./Cache"
-import { TabContext, TabList, TabPanel } from "@mui/lab"
+import PlaygroundResult from "./PlaygroundResult"
+import PlaygroundEditor from "./PlaygroundEditor"
 
-const Playground: React.FC = () => {
-  const [tab, setTab] = useState("query")
+type PlaygroundProps = {
+  types: string
+  initialCode: string
+}
+
+const Playground: React.FC<PlaygroundProps> = ({ types, initialCode }) => {
+  const [code, setCode] = useState(initialCode)
 
   return (
-    <TabContext value={tab}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <TabList
-          onChange={(_, value) => setTab(value)}
-          aria-label="lab API tabs example"
-        >
-          <Tab label="Query" value="query" />
-          <Tab label="Mutation" value="mutation" />
-          <Tab label="Cache" value="cache" />
-        </TabList>
-      </Box>
-      <TabPanel value="query">
-        <Query />
-      </TabPanel>
-      <TabPanel value="mutation">
-        <Mutation />
-      </TabPanel>
-      <TabPanel value="cache">
-        <Cache />
-      </TabPanel>
-    </TabContext>
+    <>
+      <PlaygroundEditor value={code} onChange={setCode} types={types} />
+      <PlaygroundResult code={code} />
+    </>
   )
 }
 
