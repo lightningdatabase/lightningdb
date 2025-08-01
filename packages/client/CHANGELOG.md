@@ -1,5 +1,11 @@
 # @lightningdb/client
 
+## 0.1.16
+
+### Patch Changes
+
+- 210e22c: Make client zod peer dependency
+
 ## 0.1.15
 
 ### Patch Changes
