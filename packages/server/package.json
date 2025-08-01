@@ -1,6 +1,6 @@
 {
   "name": "@lightningdb/server",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "LightningDB Server",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

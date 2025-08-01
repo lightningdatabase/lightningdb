@@ -1,5 +1,11 @@
 # @lightningdb/server
 
+## 0.1.15
+
+### Patch Changes
+
+- 59f662e: update zod dependency
+
 ## 0.1.14
 
 ### Patch Changes
