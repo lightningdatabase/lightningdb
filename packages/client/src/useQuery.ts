@@ -206,3 +206,5 @@ const useQuery = <
 }
 
 export default useQuery
+
+export type { QueryType }
