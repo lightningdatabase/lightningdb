@@ -1,6 +1,6 @@
 {
   "name": "@lightningdb/client",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "LightningDB Client",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

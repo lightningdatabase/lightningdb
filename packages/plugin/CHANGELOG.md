@@ -1,5 +1,11 @@
 # @lightningdb/plugin
 
+## 0.1.17
+
+### Patch Changes
+
+- 6fddf8c: Fix for alias queries
+
 ## 0.1.16
 
 ## 0.1.15
