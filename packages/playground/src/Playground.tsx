@@ -1,21 +1,44 @@
 import React, { useState } from "react"
-import PlaygroundResult from "./PlaygroundResult"
-import PlaygroundEditor from "./PlaygroundEditor"
+import PlaygroundTabs, { Tab } from "./PlaygroundTabs"
 
-type PlaygroundProps = {
-  types: string
-  initialCode: string
-}
+const INITIAL_TABS: Tab[] = [
+  { id: 1, label: "First Tab" },
+  { id: 2, label: "Second Tab" },
+  { id: 3, label: "Third Tab" },
+]
 
-const Playground: React.FC<PlaygroundProps> = ({ types, initialCode }) => {
-  const [code, setCode] = useState(initialCode)
+export default function ChromeStyleTabs() {
+  const [tabs, setTabs] = useState<Tab[]>(INITIAL_TABS)
+  const [activeTab, setActiveTab] = useState<number>(1)
+
+  const handleAddTab = () => {
+    setTabs([
+      ...tabs,
+      {
+        id: tabs.length + 1,
+        label: "New Tab",
+      },
+    ])
+  }
+
+  const handleTabClose = (tabId: number) => {
+    if (activeTab === tabId) setActiveTab(tabs[0]?.id)
+    setTabs(prevTabs => prevTabs.filter(tab => tab.id !== tabId))
+  }
 
   return (
     <>
-      <PlaygroundEditor value={code} onChange={setCode} types={types} />
-      <PlaygroundResult code={code} />
+      {activeTab}
+      <PlaygroundTabs
+        tabs={tabs}
+        activeTab={activeTab}
+        onActiveTabChange={(a: number) => {
+          console.log(a)
+          setActiveTab(a)
+        }}
+        onTabAdd={handleAddTab}
+        onTabClose={handleTabClose}
+      />
     </>
   )
 }
-
-export default Playground
