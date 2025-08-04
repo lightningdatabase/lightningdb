@@ -1,44 +1,68 @@
 import React, { useState } from "react"
-import PlaygroundTabs, { Tab } from "./PlaygroundTabs"
+import PlaygroundTabs, { Tab as TabInterface } from "./PlaygroundTabs"
+import PlaygroundEditor from "./PlaygroundEditor"
+import PlaygroundResult from "./PlaygroundResult"
 
-const INITIAL_TABS: Tab[] = [
-  { id: 1, label: "First Tab" },
-  { id: 2, label: "Second Tab" },
-  { id: 3, label: "Third Tab" },
+type Tab = TabInterface & {
+  code: string
+}
+
+const INITIAL_TABS = [
+  { id: 1, label: "First Tab", code: "" },
+  { id: 2, label: "Second Tab", code: "" },
+  { id: 3, label: "Third Tab", code: "" },
 ]
 
-export default function ChromeStyleTabs() {
-  const [tabs, setTabs] = useState<Tab[]>(INITIAL_TABS)
-  const [activeTab, setActiveTab] = useState<number>(1)
+type PlaygroundProps = {
+  types: string
+}
 
-  const handleAddTab = () => {
-    setTabs([
-      ...tabs,
-      {
-        id: tabs.length + 1,
-        label: "New Tab",
-      },
-    ])
-  }
+const Playground: React.FC<PlaygroundProps> = ({ types }) => {
+  const [tabs, setTabs] = useState<Tab[]>(INITIAL_TABS)
+  const [activeTabId, setActiveTabId] = useState<number | null>(1)
+
+  const handleAddTab = () => setActiveTabId(null)
 
   const handleTabClose = (tabId: number) => {
-    if (activeTab === tabId) setActiveTab(tabs[0]?.id)
+    if (activeTabId === tabId) setActiveTabId(tabs[0]?.id)
     setTabs(prevTabs => prevTabs.filter(tab => tab.id !== tabId))
+  }
+
+  const activeTab = tabs.find(tab => tab.id === activeTabId)
+
+  const handleCodeChange = (code: string) => {
+    if (activeTabId === null) return
+    setTabs(prevTabs =>
+      prevTabs.map(tab => (tab.id === activeTabId ? { ...tab, code } : tab)),
+    )
   }
 
   return (
     <>
-      {activeTab}
       <PlaygroundTabs
         tabs={tabs}
-        activeTab={activeTab}
+        activeTab={activeTabId}
         onActiveTabChange={(a: number) => {
           console.log(a)
-          setActiveTab(a)
+          setActiveTabId(a)
         }}
         onTabAdd={handleAddTab}
         onTabClose={handleTabClose}
       />
+      {activeTab ? (
+        <>
+          <PlaygroundEditor
+            value={activeTab.code}
+            onChange={handleCodeChange}
+            types={types}
+          />
+          <PlaygroundResult code={activeTab.code} />
+        </>
+      ) : (
+        <>New</>
+      )}
     </>
   )
 }
+
+export default Playground

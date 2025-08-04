@@ -10,7 +10,7 @@ export interface Tab {
 
 type PlaygroundTabsProps = {
   tabs: Tab[]
-  activeTab: number
+  activeTab: number | null
   onActiveTabChange: (tabId: number) => void
   onTabClose: (tab: number) => void
   onTabAdd: () => void
