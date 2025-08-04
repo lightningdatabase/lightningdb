@@ -2,9 +2,10 @@ import React, { useState } from "react"
 import PlaygroundTabs, { Tab as TabInterface } from "./PlaygroundTabs"
 import PlaygroundEditor from "./PlaygroundEditor"
 import PlaygroundResult from "./PlaygroundResult"
+import PlaygroundPanel from "./PlaygroundPanel"
 
 type Tab = TabInterface & {
-  code: string
+  code: string | null
 }
 
 const INITIAL_TABS = [
@@ -19,13 +20,23 @@ type PlaygroundProps = {
 
 const Playground: React.FC<PlaygroundProps> = ({ types }) => {
   const [tabs, setTabs] = useState<Tab[]>(INITIAL_TABS)
-  const [activeTabId, setActiveTabId] = useState<number | null>(1)
+  const [activeTabId, setActiveTabId] = useState<number>(1)
 
-  const handleAddTab = () => setActiveTabId(null)
+  const handleAddTab = () => {
+    setTabs([
+      ...tabs,
+      {
+        id: tabs.length + 1,
+        label: "New Tab",
+        code: null,
+      },
+    ])
+    setActiveTabId(tabs.length + 1)
+  }
 
   const handleTabClose = (tabId: number) => {
-    if (activeTabId === tabId) setActiveTabId(tabs[0]?.id)
     setTabs(prevTabs => prevTabs.filter(tab => tab.id !== tabId))
+    if (activeTabId === tabId) setActiveTabId(tabs[0]?.id)
   }
 
   const activeTab = tabs.find(tab => tab.id === activeTabId)
@@ -49,17 +60,12 @@ const Playground: React.FC<PlaygroundProps> = ({ types }) => {
         onTabAdd={handleAddTab}
         onTabClose={handleTabClose}
       />
-      {activeTab ? (
-        <>
-          <PlaygroundEditor
-            value={activeTab.code}
-            onChange={handleCodeChange}
-            types={types}
-          />
-          <PlaygroundResult code={activeTab.code} />
-        </>
-      ) : (
-        <>New</>
+      {activeTab && (
+        <PlaygroundPanel
+          types={types}
+          code={activeTab.code}
+          onCodeChange={handleCodeChange}
+        />
       )}
     </>
   )
