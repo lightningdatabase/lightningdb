@@ -41,6 +41,13 @@ const Playground: React.FC<PlaygroundProps> = ({ types }) => {
 
   const activeTab = tabs.find(tab => tab.id === activeTabId)
 
+  const handleChange = (t: { label: string; code: string }) => {
+    if (activeTabId === null) return
+    setTabs(prevTabs =>
+      prevTabs.map(tab => (tab.id === activeTabId ? { ...tab, ...t } : tab)),
+    )
+  }
+
   const handleCodeChange = (code: string) => {
     if (activeTabId === null) return
     setTabs(prevTabs =>
@@ -64,6 +71,7 @@ const Playground: React.FC<PlaygroundProps> = ({ types }) => {
         <PlaygroundPanel
           types={types}
           code={activeTab.code}
+          onChange={handleChange}
           onCodeChange={handleCodeChange}
         />
       )}

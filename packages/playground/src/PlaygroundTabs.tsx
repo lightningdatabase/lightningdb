@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Tabs, Tab, IconButton, Typography, Button } from "@mui/material"
+import { Box, Tab, IconButton, Typography, Button } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 import AddIcon from "@mui/icons-material/Add"
 
