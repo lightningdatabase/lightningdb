@@ -1,25 +1,85 @@
 import React, { useState } from "react"
 import PlaygroundTabs, { Tab as TabInterface } from "./PlaygroundTabs"
-import PlaygroundEditor from "./PlaygroundEditor"
-import PlaygroundResult from "./PlaygroundResult"
 import PlaygroundPanel from "./PlaygroundPanel"
 
-type Tab = TabInterface & {
+export type Tab = TabInterface & {
   code: string | null
 }
 
 const INITIAL_TABS = [
-  { id: 1, label: "First Tab", code: "" },
-  { id: 2, label: "Second Tab", code: "" },
-  { id: 3, label: "Third Tab", code: "" },
+  {
+    id: 1,
+    label: "List users",
+    code: `useQuery({
+    users: {
+        include: {
+            posts: true,
+        },
+        orderBy: {
+            id: "asc",
+        },
+    },
+})`,
+  },
+  {
+    id: 2,
+    label: "Create user",
+    code: `useMutation({
+    users: {
+        create: {
+            data: {
+                name: "Test User",
+                email: "test@example.com",
+            },
+        },
+    },
+  })`,
+  },
+  {
+    id: 3,
+    label: "List posts",
+    code: `useQuery({
+    posts: {},
+})`,
+  },
+  {
+    id: 4,
+    label: "Create post",
+    code: `useMutation({
+    posts: {
+        create: {
+            data: {
+                title: 'Post 1',
+            },
+        },
+    },
+})`,
+  },
+  {
+    id: 5,
+    label: "Update post",
+    code: `useMutation({
+    posts: {
+        update: {
+            where: {
+                id: 1,
+            },
+            data: {
+                title: 'New post title',
+            },
+        },
+    },
+})`,
+  },
 ]
 
 type PlaygroundProps = {
   types: string
+  intialTabs?: Tab[]
 }
 
-const Playground: React.FC<PlaygroundProps> = ({ types }) => {
-  const [tabs, setTabs] = useState<Tab[]>(INITIAL_TABS)
+const Playground: React.FC<PlaygroundProps> = ({ types, intialTabs }) => {
+  const [tabs, setTabs] = useState<Tab[]>(intialTabs ?? INITIAL_TABS)
   const [activeTabId, setActiveTabId] = useState<number>(1)
 
   const handleAddTab = () => {
