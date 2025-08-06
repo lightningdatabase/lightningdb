@@ -1,3 +1,3 @@
-import Playground from "./Playground"
+import Playground, { type Tab } from "./Playground"
 
-export { Playground }
+export { Playground, Tab }
