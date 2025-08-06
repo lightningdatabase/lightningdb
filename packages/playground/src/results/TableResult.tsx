@@ -11,6 +11,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material"
+import anyToString from "../helpers/anyToString"
 
 type TableResultProps = {
   data: Partial<QueryResponse<any, ModelsType, ModelsType>>[string]
@@ -52,7 +53,7 @@ const TableResult: React.FC<TableResultProps> = ({ data }) => {
             <TableRow key={index}>
               {columnKeys.map(col => (
                 <TableCell key={`${index}${col}`}>
-                  {JSON.stringify(row[col])}
+                  {anyToString(row[col])}
                 </TableCell>
               ))}
             </TableRow>
