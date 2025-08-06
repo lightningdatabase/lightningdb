@@ -63,7 +63,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   }
 
   return (
-    <Box>
+    <Box sx={{ p: 3 }}>
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
@@ -71,23 +71,49 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
       )}
 
       {codeUri && (
-        <Editor
-          height="400px"
-          defaultLanguage="typescript"
-          path={codeUri.toString()}
-          theme="vs-light"
-          value={value}
-          onChange={validateCode}
-          options={{
-            fontSize: 14,
-            minimap: { enabled: false },
-            wordWrap: "on",
-            scrollBeyondLastLine: false,
-            contextmenu: false,
-            lineNumbers: "off",
-            showFoldingControls: "never",
+        <Box
+          sx={{
+            border: "1px solid",
+            borderColor: "divider",
+            borderRadius: 1,
+            px: 1,
+            py: 1,
+            "&:hover": {
+              borderColor: "text.primary",
+            },
+            "&.Mui-focused": {
+              borderColor: "primary.main",
+              boxShadow: theme => `0 0 0 2px ${theme.palette.primary.main}33`,
+            },
           }}
-        />
+        >
+          <Editor
+            height="200px"
+            defaultLanguage="typescript"
+            path={codeUri.toString()}
+            theme="vs-light"
+            value={value}
+            onChange={validateCode}
+            options={{
+              fontSize: 14,
+              minimap: { enabled: false },
+              lineNumbers: "off",
+              glyphMargin: false,
+              folding: false,
+              lineDecorationsWidth: 0,
+              lineNumbersMinChars: 0,
+              scrollbar: {
+                vertical: "hidden",
+                horizontal: "hidden",
+              },
+              overviewRulerLanes: 0,
+              renderLineHighlight: "none",
+              hideCursorInOverviewRuler: true,
+              scrollBeyondLastLine: false,
+              wordWrap: "on",
+            }}
+          />
+        </Box>
       )}
     </Box>
   )
