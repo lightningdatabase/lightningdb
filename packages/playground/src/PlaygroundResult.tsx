@@ -1,6 +1,6 @@
 import React from "react"
-import QueryResult from "./QueryResult"
-import MutationResult from "./MutationResult"
+import QueryResult from "./results/QueryResult"
+import MutationResult from "./results/MutationResult"
 
 type PlaygroundResultProps = {
   code: string

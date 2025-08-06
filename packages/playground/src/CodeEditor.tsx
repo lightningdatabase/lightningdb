@@ -63,7 +63,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   }
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box>
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
@@ -102,10 +102,6 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
               folding: false,
               lineDecorationsWidth: 0,
               lineNumbersMinChars: 0,
-              scrollbar: {
-                vertical: "hidden",
-                horizontal: "hidden",
-              },
               overviewRulerLanes: 0,
               renderLineHighlight: "none",
               hideCursorInOverviewRuler: true,

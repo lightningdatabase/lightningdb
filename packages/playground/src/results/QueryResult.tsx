@@ -1,7 +1,8 @@
 import React from "react"
 import { baseUseQuery } from "@lightningdb/client"
-import { Typography } from "@mui/material"
 import { Parser } from "@dldc/literal-parser"
+import ResultDisplay from "./ResultDisplay"
+import { Alert } from "@mui/material"
 
 const parseCode = (input: string) => {
   try {
@@ -18,11 +19,9 @@ type QueryResultProps = {
 const QueryResult: React.FC<QueryResultProps> = ({ query }) => {
   const { data } = baseUseQuery(parseCode(query) ?? {})
 
-  return (
-    <Typography variant="body2" component="div">
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-    </Typography>
-  )
+  if (data) return <ResultDisplay data={data} />
+
+  return <Alert severity="info">Query not valid</Alert>
 }
 
 export default QueryResult
