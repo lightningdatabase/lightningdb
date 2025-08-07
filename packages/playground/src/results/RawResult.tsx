@@ -1,10 +1,8 @@
 import React from "react"
-import { QueryResponse } from "../../../client/dist/types"
-import { ModelsType } from "../../../client/dist/context"
 import { Box, Typography } from "@mui/material"
 
 type RawResultProps = {
-  data: Partial<QueryResponse<any, ModelsType, ModelsType>>
+  data: Record<string, Record<string, any>[] | undefined>
 }
 
 const RawResult: React.FC<RawResultProps> = ({ data }) => (

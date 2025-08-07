@@ -1,6 +1,4 @@
 import React from "react"
-import { QueryResponse } from "../../../client/dist/types"
-import { ModelsType } from "../../../client/dist/context"
 import {
   Paper,
   Table,
@@ -14,7 +12,7 @@ import {
 import anyToString from "../helpers/anyToString"
 
 type TableResultProps = {
-  data: Partial<QueryResponse<any, ModelsType, ModelsType>>[string]
+  data: Record<string, any>[] | undefined
 }
 
 const TableResult: React.FC<TableResultProps> = ({ data }) => {

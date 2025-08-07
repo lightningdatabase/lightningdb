@@ -1,12 +1,10 @@
 import React, { useState } from "react"
-import { QueryResponse } from "../../../client/dist/types"
-import { ModelsType } from "../../../client/dist/context"
 import { Box, Tab, Tabs } from "@mui/material"
 import RawResult from "./RawResult"
 import TableResult from "./TableResult"
 
 type ResultDisplayProps = {
-  data: Partial<QueryResponse<any, ModelsType, ModelsType>>
+  data: Record<string, Record<string, any>[] | undefined>
 }
 
 const ResultDisplay: React.FC<ResultDisplayProps> = ({ data }) => {
