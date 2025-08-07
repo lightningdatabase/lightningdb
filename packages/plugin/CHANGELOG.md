@@ -1,5 +1,11 @@
 # @lightningdb/plugin
 
+## 0.1.18
+
+### Patch Changes
+
+- 39d1304: Add ts-nocheck to client schema file
+
 ## 0.1.17
 
 ### Patch Changes
