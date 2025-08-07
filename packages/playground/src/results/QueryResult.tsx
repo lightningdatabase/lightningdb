@@ -2,7 +2,7 @@ import React from "react"
 import { baseUseQuery } from "@lightningdb/client"
 import { Parser } from "@dldc/literal-parser"
 import ResultDisplay from "./ResultDisplay"
-import { Alert } from "@mui/material"
+import { Alert, CircularProgress } from "@mui/material"
 
 const parseCode = (input: string) => {
   try {
@@ -17,9 +17,11 @@ type QueryResultProps = {
 }
 
 const QueryResult: React.FC<QueryResultProps> = ({ query }) => {
-  const { data } = baseUseQuery(parseCode(query) ?? {})
+  const { data, isLoading } = baseUseQuery(parseCode(query) ?? {})
 
-  if (data) return <ResultDisplay data={data} />
+  if (isLoading) return <CircularProgress size="small" sx={{ mt: 2 }} />
+
+  if (data !== undefined) return <ResultDisplay data={data} />
 
   return <Alert severity="info">Query not valid</Alert>
 }
