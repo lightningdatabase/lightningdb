@@ -1,5 +1,13 @@
 # @lightningdb/playground
 
+## 0.1.1
+
+### Patch Changes
+
+- 36bf2d4: Tab improvements
+- 63e6024: Update imports and handle loading state
+- 506ceff: Playground new tab format
+
 ## 0.1.0
 
 ### Minor Changes

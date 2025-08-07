@@ -1,6 +1,6 @@
 {
   "name": "@lightningdb/playground",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "LightningDB Playground",
   "type": "module",
   "main": "./dist/index.js",
