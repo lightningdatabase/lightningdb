@@ -144,11 +144,26 @@ const checkRow = async (
   row: Record<string, any>,
   query: StoredQuery,
   enhancedPrisma: PrismaClient,
-): Promise<boolean> =>
-  enhancedPrisma[singleModelName(query.table)].check({
-    operation: "read",
-    where: row,
-  })
+): Promise<boolean> => {
+  const model = enhancedPrisma[singleModelName(query.table)]
+
+  if (!("check" in model)) return true
+
+  try {
+    return await model.check({
+      operation: "read",
+      where: row,
+    })
+  } catch (err) {
+    if (
+      err instanceof Error &&
+      err.message.includes("Generated permission checkers not found.")
+    )
+      return true
+
+    throw err
+  }
+}
 
 async function someAsync<T>(
   arr: T[],

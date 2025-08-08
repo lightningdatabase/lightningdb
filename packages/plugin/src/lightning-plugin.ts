@@ -1,17 +1,12 @@
 import type { PluginOptions } from "@zenstackhq/sdk"
-import type { DMMF } from "@zenstackhq/sdk/prisma"
 import { DataModel, isDataModel, type Model } from "@zenstackhq/sdk/ast"
 import { generateClient } from "./client/generator"
 import { Model as ModelParser } from "./modelParser"
 import { generateServer } from "./server/generator"
 
-export const name = "LightningDB Plugin"
+export const name = "LightningDB"
 
-const run = async (
-  model: Model,
-  options: PluginOptions,
-  dmmf: DMMF.Document,
-) => {
+const run = async (model: Model, options: PluginOptions) => {
   const dataModels = model.declarations.filter((x): x is DataModel =>
     isDataModel(x),
   )
