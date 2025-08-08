@@ -42,7 +42,7 @@ const generateHandler =
 
       if (!basicResult.success) {
         console.log("BasicResult failure")
-        ws.send(JSON.stringify({ error: basicResult.error.errors }))
+        ws.send(JSON.stringify({ error: basicResult.error }))
         return
       }
 
@@ -53,7 +53,7 @@ const generateHandler =
 
         if (!result.success) {
           console.log("Result failure")
-          ws.send(JSON.stringify({ error: result.error.errors, queryId }))
+          ws.send(JSON.stringify({ error: result.error, queryId }))
           return
         }
 
