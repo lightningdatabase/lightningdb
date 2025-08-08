@@ -144,16 +144,11 @@ const checkRow = async (
   row: Record<string, any>,
   query: StoredQuery,
   enhancedPrisma: PrismaClient,
-): Promise<boolean> => {
-  const res = await enhancedPrisma[singleModelName(query.table)].check({
+): Promise<boolean> =>
+  enhancedPrisma[singleModelName(query.table)].check({
     operation: "read",
     where: row,
   })
-
-  console.log("checkRow", res)
-
-  return res
-}
 
 async function someAsync<T>(
   arr: T[],
@@ -182,7 +177,7 @@ const generateFilterQuery =
             return checkRow(getRowFromChange, query, change)
 
           if (change.kind === "update") {
-            const ch =
+            return (
               (await checkRow(
                 getRowFromChange(change),
                 query,
@@ -193,13 +188,7 @@ const generateFilterQuery =
                 query,
                 enhancedPrisma,
               ))
-
-            console.log(getOldRowFromChange(change))
-            console.log(getRowFromChange(change))
-
-            console.log("ch", ch)
-
-            return ch
+            )
           }
 
           if (change.kind === "delete")
