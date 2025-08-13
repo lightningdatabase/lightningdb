@@ -78,6 +78,7 @@ describe("generateClientUpdates", () => {
     prismaMock.user.findMany.mockResolvedValueOnce([
       { id: 1, name: "abc11", email: "abc@example.com" },
     ])
+    prismaMock.user.check.mockResolvedValueOnce(true)
 
     const groupedChanges: GroupedChanges = {
       users: [
@@ -123,10 +124,59 @@ describe("generateClientUpdates", () => {
     expect(deletes).toEqual({})
   })
 
+  test("basic update matching query but not permission check", async () => {
+    prismaMock.user.findMany.mockResolvedValueOnce([
+      { id: 1, name: "abc11", email: "abc@example.com" },
+    ])
+    prismaMock.user.check.mockResolvedValueOnce(false)
+
+    const groupedChanges: GroupedChanges = {
+      users: [
+        {
+          kind: "update",
+          table: "users",
+          schema: "public",
+          columnnames: ["id", "name", "email"],
+          columnvalues: [1, "abc11", "abc@example.com"],
+          columntypes: ["Int", "String", "String"],
+          oldkeys: {
+            keynames: ["id"],
+            keyvalues: [1],
+            keytypes: ["Int"],
+          },
+        },
+      ],
+    }
+    const client: ClientInfo = {
+      socket,
+      queries: [
+        {
+          table: "users",
+          query: {
+            where: {
+              id: 1,
+            },
+          },
+          includes: [],
+        },
+      ],
+      user: null,
+    }
+    const { data, deletes } = await generateClientUpdates(
+      client,
+      groupedChanges,
+      prismaMock,
+    )
+
+    expect(data).toEqual({})
+    expect(deletes).toEqual({})
+  })
+
   test("basic update old values matching query", async () => {
     prismaMock.user.findMany.mockResolvedValueOnce([
       { id: 1, name: "abc12", email: "abc@example.com" },
     ])
+    prismaMock.user.check.mockResolvedValueOnce(true)
 
     const groupedChanges: GroupedChanges = {
       users: [
@@ -174,6 +224,7 @@ describe("generateClientUpdates", () => {
 
   test("update old values matching query new values missing from enhanced prisma", async () => {
     prismaMock.user.findMany.mockResolvedValueOnce([])
+    prismaMock.user.check.mockResolvedValueOnce(true)
 
     const groupedChanges: GroupedChanges = {
       users: [
@@ -254,6 +305,7 @@ describe("generateClientUpdates", () => {
 
   test("basic delete matching query", async () => {
     prismaMock.user.findMany.mockResolvedValueOnce([])
+    prismaMock.user.check.mockResolvedValueOnce(true)
 
     const groupedChanges: GroupedChanges = {
       users: [
@@ -300,6 +352,7 @@ describe("generateClientUpdates", () => {
     prismaMock.user.findMany.mockResolvedValueOnce([
       { id: 2, name: "xyz", email: "abc@example.com" },
     ])
+    prismaMock.user.check.mockResolvedValueOnce(true)
 
     const groupedChanges: GroupedChanges = {
       users: [
@@ -344,6 +397,7 @@ describe("generateClientUpdates", () => {
 
   test("update no longer returning", async () => {
     prismaMock.user.findMany.mockResolvedValueOnce([])
+    prismaMock.user.check.mockResolvedValueOnce(true)
 
     const groupedChanges: GroupedChanges = {
       users: [
@@ -407,6 +461,7 @@ describe("generateClientUpdates", () => {
         authorId: 1,
       },
     ])
+    prismaMock.post.check.mockResolvedValueOnce(true)
 
     const groupedChanges: GroupedChanges = {
       posts: [

@@ -105,35 +105,115 @@ const getDeletesFromChanges = (changes: ReplicationChange[]) =>
     )
 
 const generateFilterChange =
-  (where: object) =>
-  (change: ReplicationChange): boolean => {
-    if (change.kind === "insert")
-      return applyWhereClause(where, getRowFromChange(change))
+  (where: object, query: StoredQuery, enhancedPrisma: PrismaClient) =>
+  async (change: ReplicationChange): Promise<boolean> => {
+    if (change.kind === "insert") {
+      const row = getRowFromChange(change)
 
-    if (change.kind === "update")
       return (
-        applyWhereClause(where, getOldRowFromChange(change)) ||
-        applyWhereClause(where, getRowFromChange(change))
+        applyWhereClause(where, row) &&
+        (await checkRow(row, query, enhancedPrisma))
       )
+    }
 
-    if (change.kind === "delete")
-      return applyWhereClause(where, getOldRowFromChange(change))
+    if (change.kind === "update") {
+      const row = getRowFromChange(change)
+      const oldRow = getOldRowFromChange(change)
+
+      return (
+        (applyWhereClause(where, oldRow) &&
+          (await checkRow(oldRow, query, enhancedPrisma))) ||
+        (applyWhereClause(where, row) &&
+          (await checkRow(row, query, enhancedPrisma)))
+      )
+    }
+
+    if (change.kind === "delete") {
+      const row = getOldRowFromChange(change)
+
+      return (
+        applyWhereClause(where, row) &&
+        (await checkRow(row, query, enhancedPrisma))
+      )
+    }
 
     return false
   }
 
+const checkRow = async (
+  row: Record<string, any>,
+  query: StoredQuery,
+  enhancedPrisma: PrismaClient,
+): Promise<boolean> => {
+  const model = enhancedPrisma[singleModelName(query.table)]
+
+  if (!("check" in model)) return true
+
+  try {
+    return await model.check({
+      operation: "read",
+      where: row,
+    })
+  } catch (err) {
+    if (
+      err instanceof Error &&
+      err.message.includes("Generated permission checkers not found.")
+    )
+      return true
+
+    throw err
+  }
+}
+
+async function someAsync<T>(
+  arr: T[],
+  predicate: (item: T) => Promise<boolean | undefined>,
+): Promise<boolean> {
+  for (const item of arr) {
+    if (await predicate(item)) {
+      return true
+    }
+  }
+  return false
+}
+
 const generateFilterQuery =
-  (groupedChanges: GroupedChanges) =>
-  (query: StoredQuery): boolean => {
+  (groupedChanges: GroupedChanges, enhancedPrisma: PrismaClient) =>
+  async (query: StoredQuery): Promise<boolean> => {
     //Check if any changes match query table
     const changes: ReplicationChange[] | undefined = groupedChanges[query.table]
 
     if (changes) {
       const where = query.query.where
 
-      if (!where) return true
+      if (!where)
+        return someAsync(changes, async change => {
+          if (change.kind === "insert")
+            return checkRow(getRowFromChange, query, change)
 
-      const matchChanges = changes.some(generateFilterChange(where))
+          if (change.kind === "update") {
+            return (
+              (await checkRow(
+                getRowFromChange(change),
+                query,
+                enhancedPrisma,
+              )) ||
+              (await checkRow(
+                getOldRowFromChange(change),
+                query,
+                enhancedPrisma,
+              ))
+            )
+          }
+
+          if (change.kind === "delete")
+            return checkRow(getOldRowFromChange(change), query, enhancedPrisma)
+        })
+
+      const matchChanges = await someAsync(
+        changes,
+        generateFilterChange(where, query, enhancedPrisma),
+      )
 
       if (matchChanges) return true
     }
@@ -150,7 +230,10 @@ const generateFilterQuery =
 
         if (!where) return true
 
-        return changes.some(generateFilterChange(where))
+        return someAsync(
+          changes,
+          generateFilterChange(where, query, enhancedPrisma),
+        )
       })
 
     return false
@@ -176,6 +259,14 @@ const runQuery = async (
   return splitResult(query.table, res, query.query)
 }
 
+async function filterAsync<T>(
+  arr: T[],
+  predicate: (item: T) => Promise<boolean>,
+): Promise<T[]> {
+  const results = await Promise.all(arr.map(predicate))
+  return arr.filter((_, i) => results[i])
+}
+
 export const generateClientUpdates = async (
   client: ClientInfo,
   groupedChanges: GroupedChanges,
@@ -187,8 +278,9 @@ export const generateClientUpdates = async (
   const enhancedPrisma = enhance(prismaClient, { user: client.user })
 
   // Get matching queries based on table name and where clause
-  const matchingQueries = client.queries.filter(
-    generateFilterQuery(groupedChanges),
+  const matchingQueries = await filterAsync(
+    client.queries,
+    generateFilterQuery(groupedChanges, enhancedPrisma),
   )
 
   const results: Record<string, QueryRow[]>[] = await Promise.all(
